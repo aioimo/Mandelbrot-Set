@@ -20,6 +20,14 @@ precision = 500
 img = Image.new('RGB', (width, height), color = 'black')
 pixels = img.load()
 
+## Coloring options
+EXP = 0.3
+CONST = 0.50
+SCALE = 2.2
+
+def fileName(precision, exp, const, scale):
+    return f"output_{precision}_{exp}_{const}_{scale}.png"
+
 def logColor(distance):
     color = -1 * math.log(distance, 50)
     rgb = colorsys.hsv_to_rgb(0.4 + 0.9 * color,0.8,0.9)
@@ -45,15 +53,17 @@ for row in range(height):
         for i in range(precision + 1):
             a, b = z_squared(x,y)
             x, y = plus(a,b, x_0, y_0)
-            
+
             if x*x + y*y > 4:
                 break
         if i < precision:
             distance = (i + 1) / (precision + 1)
-            rgb = powerColor(distance, 0.2, 0.27, 1.0)
+            rgb = powerColor(distance, EXP, CONST, SCALE)
             pixels[col,row] = rgb
         index = row * width + col + 1
         print("{} / {}, {}%".format(index, width * height, round(index / width / height * 100 * 10) / 10))
 
-img.save('output.png')
-os.system('open output.png')
+filename = fileName(precision, EXP, CONST, SCALE)
+
+img.save(filename)
+os.system(f"open {filename}")
