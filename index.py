@@ -3,7 +3,7 @@ import colorsys
 import math
 import os
 
-width = 100
+width = 2000
 
 center_x = -0.65
 center_y = 0
@@ -44,22 +44,29 @@ def z_squared(x,y):
 def plus(a,b, x,y):
     return a + x, b + y
 
+half_height = (height + 1) // 2
+
 for row in range(height):
     for col in range(width):
-        x = min_x + col * x_range / width
-        y = max_y - row * y_range / height
-        x_0 = x
-        y_0 = y
-        for i in range(precision + 1):
-            a, b = z_squared(x,y)
-            x, y = plus(a,b, x_0, y_0)
+        if (row < half_height or center_y != 0):
+            x = min_x + col * x_range / width
+            y = max_y - row * y_range / height
+            x_0 = x
+            y_0 = y
+            for i in range(precision + 1):
+                a, b = z_squared(x,y)
+                x, y = plus(a,b, x_0, y_0)
 
-            if x*x + y*y > 4:
-                break
-        if i < precision:
-            distance = (i + 1) / (precision + 1)
-            rgb = powerColor(distance, EXP, CONST, SCALE)
-            pixels[col,row] = rgb
+                if x*x + y*y > 4:
+                    break
+            if i < precision:
+                distance = (i + 1) / (precision + 1)
+                rgb = powerColor(distance, EXP, CONST, SCALE)
+                pixels[col,row] = rgb
+        else: 
+            mirrored_row = (height - 1) - row 
+            pixels[col,row] =  pixels[col,mirrored_row]
+
         index = row * width + col + 1
         print("{} / {}, {}%".format(index, width * height, round(index / width / height * 100 * 10) / 10))
 
