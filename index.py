@@ -30,6 +30,12 @@ def powerColor(distance, exp, const, scale):
     rgb = colorsys.hsv_to_rgb(const + scale * color,1 - 0.6 * color,0.9)
     return tuple(round(i * 255) for i in rgb)
 
+def z_squared(x,y):
+    return x*x - y*y, 2 * x * y
+
+def plus(a,b, x,y):
+    return a + x, b + y
+
 for row in range(height):
     for col in range(width):
         x = min_x + col * x_range / width
@@ -37,10 +43,9 @@ for row in range(height):
         x_0 = x
         y_0 = y
         for i in range(precision + 1):
-            a = x*x - y*y  #real component of z^2
-            b = 2 * x * y  #imaginary component of z^2
-            x = a + x_0    #real component of new z
-            y = b + y_0    #imaginary component of new z
+            a, b = z_squared(x,y)
+            x, y = plus(a,b, x_0, y_0)
+            
             if x*x + y*y > 4:
                 break
         if i < precision:
