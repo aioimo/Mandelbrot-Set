@@ -5,17 +5,15 @@ import os
 
 width = 100
 
-x = -0.65
-y = 0
-xRange = 3.4
-aspectRatio = 4/3
+center_x = -0.65
+center_y = 0
+x_range = 3.4
+aspect_ratio = 4/3
 
-height = round(width / aspectRatio)
-yRange = xRange / aspectRatio
-minX = x - xRange / 2
-maxX = x + xRange / 2
-minY = y - yRange / 2
-maxY = y + yRange / 2
+height = round(width / aspect_ratio)
+y_range = x_range / aspect_ratio
+min_x = center_x - x_range / 2
+max_y = center_y + y_range / 2
 
 precision = 500
 
@@ -34,15 +32,15 @@ def powerColor(distance, exp, const, scale):
 
 for row in range(height):
     for col in range(width):
-        x = minX + col * xRange / width
-        y = maxY - row * yRange / height
-        oldX = x
-        oldY = y
+        x = min_x + col * x_range / width
+        y = max_y - row * y_range / height
+        x_0 = x
+        y_0 = y
         for i in range(precision + 1):
-            a = x*x - y*y #real component of z^2
-            b = 2 * x * y #imaginary component of z^2
-            x = a + oldX #real component of new z
-            y = b + oldY #imaginary component of new z
+            a = x*x - y*y  #real component of z^2
+            b = 2 * x * y  #imaginary component of z^2
+            x = a + x_0    #real component of new z
+            y = b + y_0    #imaginary component of new z
             if x*x + y*y > 4:
                 break
         if i < precision:
